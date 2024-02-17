@@ -1,13 +1,12 @@
 # Добавить системную папку для импорта модулей
 import sys
-sys.path.insert(0, r'C:\Users\user\Desktop\project\config')
-sys.path.insert(0, r'C:\Users\user\Desktop\project\config\map')
-sys.path.insert(0, r'C:\Users\user\Desktop\project\db')
+sys.path.insert(0, r'\config')
+sys.path.insert(0, r'C:\Users\user\Desktop\3d_arrays_map\3d_arrays_map\config\map')
+sys.path.insert(0, r'C:\Users\user\Desktop\3d_arrays_map\3d_arrays_map\db')
 
 # Импорт модулей приложения
 import pygame as pg
 from copy import deepcopy
-from pprint import pprint
 from map import field
 from query import DB
 from shortest_way import bfs
@@ -18,7 +17,7 @@ from interface import InputBox, Button
 class Program:
     def __init__(self)->None:
         pass
-    def print_field(self,field:list[list[str]], path:list,start:list,goal:list):
+    def print_field(self,field:list[list[str]], path:list,start:list,goal:list) ->list[list[str]]:
         if path:
             new_map:list[list] = deepcopy(field)
             s = new_map[start[0]][start[1]]
