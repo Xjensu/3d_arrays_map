@@ -1,1 +1,1 @@
-host user password name_database port
+127.0.0.1 xjensu franchesko213 auditorium 5432
