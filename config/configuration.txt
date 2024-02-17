@@ -1,1 +1,1 @@
-127.0.0.1 xjensu franchesko213 auditorium 5432
+host user password database_name port
