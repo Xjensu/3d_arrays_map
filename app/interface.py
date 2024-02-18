@@ -3,12 +3,12 @@ import pygame as pg
 pg.init()
 
 color_inactive = pg.Color((53,102,102))
-color_active = pg.Color((0,155,154))
+color_active = pg.Color((120, 240, 220))
 color = color_inactive
 font = pg.font.SysFont('arial', 32)
 
 class InputBox:
-    def __init__(self, x, y, w, h, text=''):
+    def __init__(self, x, y, w, h, text='Название кобинета'):
         self.rect = pg.Rect(x, y, w, h)
         self.color = color_inactive
         self.text = text
@@ -19,6 +19,7 @@ class InputBox:
         if event.type == pg.MOUSEBUTTONDOWN:
             if self.rect.collidepoint(event.pos):
                 self.active = not self.active
+                self.text = ""
             else:
                 self.active = False
             self.color = color_active if self.active else color_inactive
@@ -31,6 +32,12 @@ class InputBox:
                 else:
                     self.text += event.unicode
                 self.txt_surface = font.render(self.text, True, self.color)
+
+    def delete_text(self):
+        self.text = ""
+        self.txt_surface = font.render(self.text, True, self.color)
+    def get_text(self):
+        return self.text
 
     def draw(self, screen):
         pg.draw.rect(screen, self.color, self.rect, 2)

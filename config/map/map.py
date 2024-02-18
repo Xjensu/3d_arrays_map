@@ -163,7 +163,7 @@ field:list[list[str]] = [
 
 
 
-"""
+
 def find_positions(field, characters):
     positions = {char: [] for char in characters}
     for z, layer in enumerate(field):
@@ -173,6 +173,6 @@ def find_positions(field, characters):
                     positions[char].append((z, y, x))
     return positions
 
-characters = ['0', '1','2','3','4','5','6','7','8','9']
+characters = ["D"]
 positions = find_positions(field, characters)
-print(positions)"""
+print(positions)

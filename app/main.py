@@ -21,9 +21,9 @@ class Program:
         if path:
             new_map:list[list] = deepcopy(field)
             s = new_map[start[0]][start[1]]
-            new_map[start[0]][start[1]] = s[:start[2]]+"1"+ s[start[2]+1:]
+            new_map[start[0]][start[1]] = s[:start[2]]+"D"+ s[start[2]+1:]
             g = new_map[goal[0]][goal[1]]
-            new_map[goal[0]][goal[1]] = g[:goal[2]]+"1"+ g[goal[2]+1:]
+            new_map[goal[0]][goal[1]] = g[:goal[2]]+"D"+ g[goal[2]+1:]
             for i in path:
                 s = new_map[i[0]][i[1]]
                 new_map[i[0]][i[1]] = s[:i[2]]+ "0"+s[i[2]+ 1: ]
@@ -31,12 +31,14 @@ class Program:
         else: return field
 
 
-    def main(self,field):
+    def main(self,field:list[list[str]])->None:
 
-        input_boxes:list = [InputBox(900, 20, 280, 32), InputBox(900, 70, 280, 32)]
-        buttons = [
-            Button(900, 130, 50, 50, (120, 240, 220), '/\\'),
-            Button(900, 200, 50, 50, (120, 240, 220), '\\/'),
+        input_boxes:list = [InputBox(900, 52, 280, 32), InputBox(900, 130, 280, 32)]
+        buttons:list[Button] = [
+            Button(900, 270, 50, 50, (120, 240, 220), '/\\'),
+            Button(900, 340, 50, 50, (120, 240, 220), '\\/'),
+            Button(900,200,120,50,(120, 240, 220),"Подтвердить"),
+            Button(1060,200,120,50,(120, 240, 220),"Отменить")
         ]
 
         start_name:str = ''
@@ -51,11 +53,13 @@ class Program:
         cols:int = len(field[0])
         rows:int = len(field[0][0])
         floor:int = 1
+        weight_tile:int =4
+        height_tile:int = 15
 
 
         entered_text:dict[str:str] = {'input1': '', "input2": ''}
 
-        sc = pg.display.set_mode([rows * 4+400, cols * 15+100])
+        sc = pg.display.set_mode([rows *weight_tile+400, cols * height_tile+100])
         clock = pg.time.Clock()
         font = pg.font.SysFont('arial', 32)
 
@@ -63,15 +67,18 @@ class Program:
 
         while True:
             sc.fill(pg.Color((10,3,16)))
-            sc.blit(font.render(f"Этаж № {buttons[0].value}",True, (255, 0, 0)), (370, 480))
+            sc.blit(font.render(f"Этаж № {buttons[0].value}",True, (255,207,223)), (370, 480))
+            sc.blit(font.render("Начало пути",True ,(255,207,223)),(900,12))
+            sc.blit(font.render("Конец пути",True ,(255,207,223)),(900,90))
             
-            map = self.print_field(field, path,start,goal)
-            floor = buttons[0].value * 2 -1
+            map:list[list[str]] = self.print_field(field, path,start,goal)
+            floor:int = buttons[0].value * 2 -1
             for y,row in enumerate(map[floor]):
                 for x,col in enumerate(row):
-                    if col == '0': pg.draw.circle(sc,(191,109,103),(x*4, y*15), 5) 
-                    if col == '#': pg.draw.rect(sc,(84, 30, 120),(x*4, y*15, 6, 13))
-                    if col == '1': pg.draw.rect(sc,(153,73,221),(x*4, y*15, 6, 13))
+                    if col == '0': pg.draw.rect(sc,(191,109,103),(x*weight_tile+weight_tile*0.5-2, y*height_tile+height_tile*0.5-3,3,3)) 
+                    # if col == '.': pg.draw.rect(sc,'white',(x*weight_tile, y*height_tile, 3, 13))
+                    if col == '#': pg.draw.rect(sc,(84, 30, 120),(x*weight_tile, y*height_tile, 6, 13))
+                    if col == 'D': pg.draw.rect(sc,(153,73,221),(x*weight_tile, y*height_tile, 6, 13))
 
 
             for event in pg.event.get(): 
@@ -80,10 +87,18 @@ class Program:
                     result = box.handle_event(event)
                     if result is not None:
                         entered_text[f'input{i+1}'] = result
+                
                 if buttons[0].is_clicked(event) and buttons[0].value <2:
                     buttons[0].value +=1
                 elif buttons[1].is_clicked(event) and buttons[0].value >1:
                     buttons[0].value -=1
+                if buttons[2].is_clicked(event):
+                    for i,box in enumerate(input_boxes):
+                        entered_text[f'input{i+1}'] = box.get_text()
+                if buttons[3].is_clicked(event):
+                    for i,box in enumerate(input_boxes):
+                        box.delete_text()
+                        entered_text[f'input{i+1}'] = ""
                         
 
             [box.draw(sc) for box in input_boxes]
