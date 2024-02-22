@@ -70,7 +70,7 @@ class Program:
             sc.blit(font.render(f"Этаж № {buttons[0].value}",True, (255,207,223)), (370, 480))
             sc.blit(font.render("Начало пути",True ,(255,207,223)),(900,12))
             sc.blit(font.render("Конец пути",True ,(255,207,223)),(900,90))
-            
+            # sc.blit(font.render("120",True,(255,207,223)),(18*weight_tile,18*height_tile))
             map:list[list[str]] = self.print_field(field, path,start,goal)
             floor:int = buttons[0].value * 2 -1
             for y,row in enumerate(map[floor]):
@@ -79,6 +79,11 @@ class Program:
                     # if col == '.': pg.draw.rect(sc,'white',(x*weight_tile, y*height_tile, 3, 13))
                     if col == '#': pg.draw.rect(sc,(84, 30, 120),(x*weight_tile, y*height_tile, 6, 13))
                     if col == 'D': pg.draw.rect(sc,(153,73,221),(x*weight_tile, y*height_tile, 6, 13))
+                    if col == 'C':
+                        sc.blit(pg.font.SysFont('arial',13).render(
+                            db.select_name_for_text_pos((floor,x,y)),True,(255,207,223)),
+                            (x*weight_tile,y*height_tile))
+                    
 
 
             for event in pg.event.get(): 
@@ -88,7 +93,7 @@ class Program:
                     if result is not None:
                         entered_text[f'input{i+1}'] = result
                 
-                if buttons[0].is_clicked(event) and buttons[0].value <2:
+                if buttons[0].is_clicked(event) and buttons[0].value <len(field)//2:
                     buttons[0].value +=1
                 elif buttons[1].is_clicked(event) and buttons[0].value >1:
                     buttons[0].value -=1
@@ -115,12 +120,9 @@ class Program:
             else: goal_name = ''
             start = db.select_coordinate_from_name(start_name) if get_start else []
             goal = db.select_coordinate_from_name(goal_name) if get_goal else []
-
-
             path = bfs(field,start,goal)
-            
             pg.display.flip()
             clock.tick(10)
 
 programm = Program()
-print(programm.main(field))
+programm.main(field)

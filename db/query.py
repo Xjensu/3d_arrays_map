@@ -25,9 +25,9 @@ class DB():
         else: return []
         
 
-    def select_name_for_coordinate(self,coordinate:list)->str:
+    def select_name_for_text_pos(self,coordinate:list)->str:
         cur = self.connection.cursor()
-        cur.execute("SELECT name from auditors WHERE coordinate = %s",(coordinate,))
+        cur.execute("SELECT name from auditors WHERE text_pos = %s",(list(coordinate),))
         return cur.fetchall()[0][0]
 
     def check_exists(self, data:str|list) -> bool:
