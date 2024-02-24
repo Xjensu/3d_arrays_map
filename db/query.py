@@ -4,12 +4,12 @@ from pathlib import Path
 
 root_folder = Path(__file__).parents[1]
 my_path = root_folder / "config/configuration.txt"
-# Подключение к базе данных
+
 
 class DB():
     def __init__(self) -> None:
         f = open(my_path,'r').readline().split()
-        self.connection:Connection = psycopg2.connect(
+        self.connection:Connection = psycopg2.connect( # Подключение к базе данных
             host = str(f[0]),
             user = str(f[1]),
             password = str(f[2]),
