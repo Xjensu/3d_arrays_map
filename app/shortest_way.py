@@ -15,7 +15,7 @@ def bfs(field:list, start:list, end:list) -> list:
 
         queue:deque = deque() 
 
-        # Задания значений для начальной точки
+        # Задаём значения для начальной точки
         distance[start[0]][start[1]][start[2]] = 0
         visited[start[0]][start[1]][start[2]] = True
         queue.append(start)
@@ -30,7 +30,8 @@ def bfs(field:list, start:list, end:list) -> list:
                     come_from[nz][nx][ny] = (z,x,y)
                     visited[nz][nx][ny] = True
                     queue.append((nz,nx,ny))
-    
+
+        # Восстановление пути
         cur:list = end
         path:list = []
         while cur is not None:
